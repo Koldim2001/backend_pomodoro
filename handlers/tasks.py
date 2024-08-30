@@ -7,18 +7,27 @@ router = APIRouter(prefix="/task", tags=["task"])
 
 sql_queries_tasks = SQLQueriesTasks(table_name="tasks")
 
-@router.get(path="/", response_model=list[TaskSchema])
+
+@router.get(
+    path="/",
+    response_model=list[TaskSchema],
+    summary="Получение списка всех задач",
+    description="Выдает по запросу список всех имеющихся задач (берет из БД либо из кэша)",
+)
 async def get_tasks():
     rows = sql_queries_tasks.select_all_rows()
-    tasks = [TaskSchema(id=row[0], name=row[1], pomodoro_count=row[2], category_id=row[3]) for row in rows]
+    tasks = [
+        TaskSchema(id=row[0], name=row[1], pomodoro_count=row[2], category_id=row[3])
+        for row in rows
+    ]
     return tasks
 
 
 @router.post(
     "/",
     response_model=TaskSchema,
-    summary="Create a new task",
-    description="This endpoint allows you to create a new task by providing the task details.",
+    summary="Создание новой задачи",
+    description="Позволяет создавать новую задачу и сохраняет ее в БД",
 )
 async def create_task(
     name: str | None = Form(None, description="Name of the task"),
@@ -30,7 +39,12 @@ async def create_task(
     return task
 
 
-@router.post(path="/{task_id}", response_model=TaskSchema)
+@router.post(
+    path="/{task_id}",
+    response_model=TaskSchema,
+    summary="Изменение имени задачи",
+    description="Позволяет изменить имя имеющейся задачи по ее id",
+)
 async def rename_task(task_id: int, name: str):
     rows = sql_queries_tasks.update_task_name(task_id, name)
     if len(rows) > 0:
@@ -41,16 +55,14 @@ async def rename_task(task_id: int, name: str):
         raise HTTPException(status_code=400, detail="Invalid request: Task not found")
 
 
-@router.delete(path="/{task_id}")
+@router.delete(
+    path="/{task_id}",
+    summary="Удаление задачи",
+    description="Позволяет удалять задачу из БД по ее id",
+)
 async def delete_task(task_id: int):
     deleted = sql_queries_tasks.delete_row_by_id(task_id)
     if deleted:
         return {"message": "task deleted"}
     else:
         raise HTTPException(status_code=404, detail="Task not found")
-
-
-def delete_row_by_id(self, task_id):
-        query = "DELETE FROM {table_name} WHERE id = %s"
-        self.cursor.execute(query.format(table_name=self.table_name), (task_id,))
-        self.connection.commit()
