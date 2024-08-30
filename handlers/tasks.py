@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Form, HTTPException
 from schema.task import TaskSchema
-from fastapi import status
 from database.queries import SQLQueriesTasks
+from database.cache import TaskCache
 
 router = APIRouter(prefix="/task", tags=["task"])
 
+# Инитциализация постграс и редис
 sql_queries_tasks = SQLQueriesTasks(table_name="tasks")
+task_cache = TaskCache(ttl=5)  # Создаем экземпляр TaskCache с ttl=5 секунд
 
 
 @router.get(
@@ -15,11 +17,23 @@ sql_queries_tasks = SQLQueriesTasks(table_name="tasks")
     description="Выдает по запросу список всех имеющихся задач (берет из БД либо из кэша)",
 )
 async def get_tasks():
+    # Проверяем наличие данных в кэше
+    cache_tasks = task_cache.get_tasks()
+    if cache_tasks:
+        print("Данные взяты из кэша")
+        return cache_tasks
+    
+    # Если данных в кэше нет, выполняем SQL-запрос
     rows = sql_queries_tasks.select_all_rows()
     tasks = [
         TaskSchema(id=row[0], name=row[1], pomodoro_count=row[2], category_id=row[3])
         for row in rows
     ]
+
+    # Сохраняем данные в кэш
+    if len(tasks) > 0:
+        task_cache.set_tasks(tasks)
+    
     return tasks
 
 
