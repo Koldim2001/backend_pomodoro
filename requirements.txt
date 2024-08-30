@@ -1,2 +1,5 @@
 fastapi==0.112.2
 pydantic-settings==2.4.0
+#psycopg2==2.9.9
+psycopg2-binary==2.9.9
+redis==5.0.8

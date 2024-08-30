@@ -1,24 +1,24 @@
 from fastapi import APIRouter, Form
 from fixtures import tasks as fixtures_tasks
-from schema.task import Task
+from schema.task import TaskSchema
 from fastapi import status
 
 
 router = APIRouter(prefix="/task", tags=["task"])
 
-@router.get(path="/", response_model=list[Task])
+@router.get(path="/", response_model=list[TaskSchema])
 async def get_tasks():
     return fixtures_tasks
 
-# @router.post(path="/", response_model=Task)
-# async def create_task(task: Task):
+# @router.post(path="/", response_model=TaskSchema)
+# async def create_task(task: TaskSchema):
 #     fixtures_tasks.append(task)
 #     return task
 
 
 @router.post(
     "/",
-    response_model=Task,
+    response_model=TaskSchema,
     summary="Create a new task",
     description="This endpoint allows you to create a new task by providing the task details.",
 )
@@ -28,12 +28,12 @@ async def create_task(
     pomodoro_count: int = Form(1, description="Number of pomodoros for the task"),
     category_id: int = Form(description="Identifier for the category"),
 ):
-    task = Task(id=id, name=name, pomodoro_count=pomodoro_count, category_id=category_id)
+    task = TaskSchema(id=id, name=name, pomodoro_count=pomodoro_count, category_id=category_id)
     fixtures_tasks.append(task)
     return task
 
 
-@router.post(path="/{task_id}", response_model=Task)
+@router.post(path="/{task_id}", response_model=TaskSchema)
 async def rename_task(task_id: int, name: str):
     for task in fixtures_tasks:
         if task["id"] == task_id:
