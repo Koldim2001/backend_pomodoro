@@ -15,8 +15,14 @@ async def create_task(task: Task):
     fixtures_tasks.append(task)
     return task
 
+@router.post(path="/{task_id}", response_model=Task)
+async def rename_task(task_id: int, name: str):
+    for task in fixtures_tasks:
+        if task["id"] == task_id:
+            task["name"] = name
+            return task
 
-@router.delete(path="/{task-id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(path="/{task_id}")
 async def delete_task(task_id: int):
     for index, task in enumerate(fixtures_tasks):
         if task["id"] == task_id:
