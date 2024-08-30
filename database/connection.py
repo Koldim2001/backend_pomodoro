@@ -38,12 +38,12 @@ class DataBase():
         except (Exception, psycopg2.Error) as error:
             print("Ошибка при удалении бд")
 
-    def create_table(self, table_name):
+    def create_table_tasks(self, table_name):
         # SQL-запрос для создания таблицы
         create_table_query = f"""
         CREATE TABLE {table_name} (
             id SERIAL PRIMARY KEY,
-            name CHAR,
+            name VARCHAR,
             pomodoro_count INTEGER,
             category_id INTEGER
         );
@@ -61,6 +61,3 @@ class DataBase():
                 f"Error while creating table: {error}"
             )   
 
-database = DataBase()
-database.drop_table("tasks")
-database.create_table("tasks")
