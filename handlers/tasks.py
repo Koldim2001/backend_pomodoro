@@ -2,9 +2,11 @@ from fastapi import APIRouter, Form
 from fixtures import tasks as fixtures_tasks
 from schema.task import TaskSchema
 from fastapi import status
-
+from database.queries import SQLQueries
 
 router = APIRouter(prefix="/task", tags=["task"])
+
+sql_queries_tasks = SQLQueries(table_name="tasks")
 
 @router.get(path="/", response_model=list[TaskSchema])
 async def get_tasks():
@@ -23,12 +25,11 @@ async def get_tasks():
     description="This endpoint allows you to create a new task by providing the task details.",
 )
 async def create_task(
-    id: int = Form(description="Unique identifier for the task"),
     name: str | None = Form(None, description="Name of the task"),
     pomodoro_count: int = Form(1, description="Number of pomodoros for the task"),
     category_id: int = Form(description="Identifier for the category"),
 ):
-    task = TaskSchema(id=id, name=name, pomodoro_count=pomodoro_count, category_id=category_id)
+    task = TaskSchema(id=???, name=name, pomodoro_count=pomodoro_count, category_id=category_id)
     fixtures_tasks.append(task)
     return task
 
