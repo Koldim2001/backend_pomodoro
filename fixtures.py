@@ -1,22 +1,26 @@
 tasks = [
     {
+        "id": 1,
         "name": "task 1",
-        "pomodoro.count": 10,
-        "category.id": 1,
+        "pomodoro_count": 10,
+        "category_id": 1,
     },
     {
+        "id": 2,
         "name": "task 2",
-        "pomodoro.count": 10,
-        "category.id": 2,
+        "pomodoro_count": 10,
+        "category_id": 2,
     },
     {
+        "id": 3,
         "name": "task 3",
-        "pomodoro.count": 10,
-        "category.id": 3,
+        "pomodoro_count": 10,
+        "category_id": 3,
     },
     {
+        "id": 4,
         "name": "task A",
-        "pomodoro.count": 10,
-        "category.id": 5,
+        "pomodoro_count": 10,
+        "category_id": 5,
     },
 ]
