@@ -5,3 +5,4 @@ class TaskSchema(BaseModel):
     name: str | None = None
     pomodoro_count: int = 1
     category_id: int
+    user_id: int
