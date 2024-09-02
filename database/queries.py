@@ -3,6 +3,7 @@ from Crypto.Hash import SHA256
 import os
 import random
 import string
+from utils.jwt import JWTUtils
 
 
 class SQLQueriesTasks():
@@ -80,10 +81,13 @@ class SQLQueriesUsers():
         access_token = self.generate_access_token()
 
         # Вставляем нового пользователя в базу данных
-        query = "INSERT INTO {table_name} (username, password, access_token) VALUES (%s, %s, %s) RETURNING id"
-        self.cursor.execute(query.format(table_name=self.table_name), (username, password_hash, access_token))
+        query = "INSERT INTO {table_name} (username, password) VALUES (%s, %s) RETURNING id"
+        self.cursor.execute(query.format(table_name=self.table_name), (username, password_hash))
         self.connection.commit()
         new_row_id = self.cursor.fetchone()[0]
+
+        access_token = JWTUtils.generate_access_token(user_id=new_row_id)
+
         return new_row_id, access_token
     
     def check_user(self, username, password):
@@ -91,7 +95,7 @@ class SQLQueriesUsers():
         password_hash = self.get_hash(password)
 
         # Проверяем наличие пользователя в базе данных
-        query = "SELECT id, password, access_token FROM {table_name} WHERE username = %s"
+        query = "SELECT id, password FROM {table_name} WHERE username = %s"
         self.cursor.execute(query.format(table_name=self.table_name), (username,))
         user_data = self.cursor.fetchone()
 
@@ -99,12 +103,13 @@ class SQLQueriesUsers():
             # Пользователь не найден
             return "Пользователь не найден"
         else:
-            user_id, stored_password_hash, access_token = user_data
+            user_id, stored_password_hash = user_data
             if password_hash != stored_password_hash:
                 # Пароль неверный
                 return "Неверный пароль"
             else:
                 # Пароль верный, возвращаем id и access_token
+                access_token = JWTUtils.generate_access_token(user_id=user_id)
                 return user_id, access_token
 
     @staticmethod

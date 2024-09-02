@@ -67,8 +67,7 @@ class DataBase():
         CREATE TABLE {table_name} (
             id SERIAL PRIMARY KEY,
             username VARCHAR,
-            password VARCHAR,
-            access_token VARCHAR
+            password VARCHAR
         );
         """
 
