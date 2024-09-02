@@ -1,5 +1,5 @@
 from settings import Settings
-from fastapi import Depends, Request, security, Security, HTTPException
+from fastapi import security, Security, HTTPException
 from datetime import datetime as dt, timedelta
 from jose import jwt, JWTError
 
