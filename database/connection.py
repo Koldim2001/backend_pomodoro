@@ -46,7 +46,7 @@ class DataBase():
             name VARCHAR,
             pomodoro_count INTEGER,
             category_id INTEGER,
-            user_id INTEGER,
+            user_id INTEGER
         );
         """
 

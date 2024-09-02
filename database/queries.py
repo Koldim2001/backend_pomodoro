@@ -16,14 +16,14 @@ class SQLQueriesTasks():
 
         self.database.create_table_tasks(self.table_name)
 
-    def create_new_row(self, name, pomodoro_count, category_id, user_id):
+    def create_new_row(self, name, pomodoro_count, category_id, user_id=1):
         query = "INSERT INTO {table_name} (name, pomodoro_count, category_id, user_id) VALUES (%s, %s, %s, %s) RETURNING id"
         self.cursor.execute(query.format(table_name=self.table_name), (name, pomodoro_count, category_id, user_id))
         self.connection.commit()
         new_row_id = self.cursor.fetchone()[0]
         return new_row_id
 
-    def update_task_name(self, task_id, new_name, user_id):
+    def update_task_name(self, task_id, new_name, user_id=1):
         query = "UPDATE {table_name} SET name = %s WHERE (id = %s and user_id = %s)"
         self.cursor.execute(query.format(table_name=self.table_name), (new_name, task_id, user_id))
         self.connection.commit()
@@ -32,14 +32,14 @@ class SQLQueriesTasks():
         rows = self.cursor.fetchall()
         return rows
 
-    def delete_row_by_id(self, task_id, user_id):
+    def delete_row_by_id(self, task_id, user_id=1):
         query = "DELETE FROM {table_name} WHERE (id = %s and user_id = %s)"
         self.cursor.execute(query.format(table_name=self.table_name), (task_id, user_id))
         deleted_count = self.cursor.rowcount
         self.connection.commit()
         return deleted_count > 0
 
-    def select_all_rows(self, user_id):
+    def select_all_rows(self, user_id=1):
         query = "SELECT * FROM {table_name} WHERE user_id = %s"
         self.cursor.execute(query.format(table_name=self.table_name), (user_id,))
         rows = self.cursor.fetchall()

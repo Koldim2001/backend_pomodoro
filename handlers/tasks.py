@@ -21,7 +21,7 @@ async def get_tasks():
     # Если данных в кэше нет, выполняем SQL-запрос
     rows = sql_queries_tasks.select_all_rows()
     tasks = [
-        TaskSchema(id=row[0], name=row[1], pomodoro_count=row[2], category_id=row[3])
+        TaskSchema(id=row[0], name=row[1], pomodoro_count=row[2], category_id=row[3], user_id=row[4])
         for row in rows
     ]
 
@@ -44,7 +44,7 @@ async def create_task(
     category_id: int = Form(description="Identifier for the category"),
 ):
     id = sql_queries_tasks.create_new_row(name, pomodoro_count, category_id)
-    task = TaskSchema(id=id, name=name, pomodoro_count=pomodoro_count, category_id=category_id)
+    task = TaskSchema(id=id, name=name, pomodoro_count=pomodoro_count, category_id=category_id, user_id=1)
     return task
 
 
