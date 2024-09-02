@@ -1,8 +1,17 @@
 from settings import Settings
+from fastapi import Depends, Request, security, Security, HTTPException
 from datetime import datetime as dt, timedelta
 from jose import jwt, JWTError
 
 settings_jwt = Settings()
+
+class TokenExpired(Exception):
+    detail = "Token has expired"
+
+
+class TokenNotCorrect(Exception):
+    detail = "Token is not correct"
+
 
 class JWTUtils:
     @staticmethod
@@ -19,7 +28,30 @@ class JWTUtils:
         try:
             payload = jwt.decode(token, settings_jwt.JWT_SECRET_KEY, algorithms=[settings_jwt.JWT_ENCODE_ALGORITHM])
         except JWTError:
-            raise "JWTError"
+            raise TokenNotCorrect
         if payload["expire"] < dt.utcnow().timestamp():
-            raise "TokenExpired"
+            raise TokenExpired
         return payload["user_id"]
+    
+
+
+reusable_oauth2 = security.HTTPBearer()
+
+
+def get_request_user_id(
+    token: security.http.HTTPAuthorizationCredentials = Security(reusable_oauth2)
+) -> int:
+    try:
+        user_id = JWTUtils.get_user_id_from_access_token(token.credentials)
+
+    except TokenExpired as e:
+        raise HTTPException(
+            status_code=401,
+            detail=e.detail
+        )
+    except TokenNotCorrect as e:
+        raise HTTPException(
+            status_code=401,
+            detail=e.detail
+        )
+    return user_id
