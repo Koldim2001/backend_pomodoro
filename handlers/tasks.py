@@ -1,13 +1,8 @@
 from fastapi import APIRouter, Form, HTTPException
-from schema.task import TaskSchema
-from database.queries import SQLQueriesTasks
-from database.cache import TaskCache
+from schema import TaskSchema
+from database import sql_queries_tasks, task_cache
 
 router = APIRouter(prefix="/task", tags=["task"])
-
-# Инитциализация постграс и редис
-sql_queries_tasks = SQLQueriesTasks(table_name="tasks")
-task_cache = TaskCache(ttl=5)  # Создаем экземпляр TaskCache с ttl=5 секунд
 
 
 @router.get(
