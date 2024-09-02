@@ -6,7 +6,7 @@ router = APIRouter(prefix="/task", tags=["task"])
 
 
 @router.get(
-    path="/",
+    path="",
     response_model=list[TaskSchema],
     summary="Получение списка всех задач",
     description="Выдает по запросу список всех имеющихся задач (берет из БД либо из кэша)",
@@ -33,7 +33,7 @@ async def get_tasks():
 
 
 @router.post(
-    "/",
+    "",
     response_model=TaskSchema,
     summary="Создание новой задачи",
     description="Позволяет создавать новую задачу и сохраняет ее в БД",

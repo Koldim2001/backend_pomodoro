@@ -6,7 +6,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post(
-    path="/",
+    path="",
     summary="Регистрация пользователей",
     description="Осуществляет создание нового пользователя",
 )
