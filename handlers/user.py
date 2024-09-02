@@ -9,7 +9,7 @@ router = APIRouter(prefix="/user", tags=["user"])
     summary="Авторизация пользователей",
     description="Осуществляет проверку доступа (вход в приложение)",
 )
-async def create_user(body: UserCreateSchema):
+async def create_user(body: UserCreateSchema) -> UserLoginSchema:
     result = sql_queries_users.check_user(body.username, body.password)
     
     if isinstance(result, str):
@@ -18,4 +18,4 @@ async def create_user(body: UserCreateSchema):
     else:
         # Если результат - кортеж, значит, проверка пройдена успешно
         user_id, access_token = result
-        return {"user_id": user_id, "access_token": access_token}
+        return UserLoginSchema(user_id=user_id, access_token=access_token)

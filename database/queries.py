@@ -66,9 +66,20 @@ class SQLQueriesUsers():
         self.database.create_table_users(self.table_name)
 
     def create_new_user(self, username, password):
+        # Проверяем, существует ли уже пользователь с таким username
+        query = "SELECT id FROM {table_name} WHERE username = %s"
+        self.cursor.execute(query.format(table_name=self.table_name), (username,))
+        existing_user = self.cursor.fetchone()
+
+        if existing_user:
+            # Пользователь с таким username уже существует
+            return "Пользователь с таким именем уже существует"
+
+        # Получаем хэш пароля и генерируем access_token
         password_hash = self.get_hash(password)
         access_token = self.generate_access_token()
 
+        # Вставляем нового пользователя в базу данных
         query = "INSERT INTO {table_name} (username, password, access_token) VALUES (%s, %s, %s) RETURNING id"
         self.cursor.execute(query.format(table_name=self.table_name), (username, password_hash, access_token))
         self.connection.commit()
