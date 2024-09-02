@@ -4,7 +4,7 @@ from utils.jwt import JWTUtils
 
 
 class SQLQueriesTasks():
-    
+
     def __init__(self, table_name, drop_table=True):
         self.database = DataBase()
         self.table_name = table_name
@@ -18,7 +18,9 @@ class SQLQueriesTasks():
 
     def create_new_row(self, name, pomodoro_count, category_id, user_id):
         query = "INSERT INTO {table_name} (name, pomodoro_count, category_id, user_id) VALUES (%s, %s, %s, %s) RETURNING id"
-        self.cursor.execute(query.format(table_name=self.table_name), (name, pomodoro_count, category_id, user_id))
+        self.cursor.execute(
+            query.format(table_name=self.table_name), (name, pomodoro_count, category_id, user_id)
+        )
         self.connection.commit()
         new_row_id = self.cursor.fetchone()[0]
         return new_row_id
@@ -51,7 +53,7 @@ class SQLQueriesTasks():
 
 
 class SQLQueriesUsers():
-    
+
     def __init__(self, table_name, drop_table=True):
         self.database = DataBase()
         self.table_name = table_name
@@ -85,7 +87,7 @@ class SQLQueriesUsers():
         access_token = JWTUtils.generate_access_token(user_id=new_row_id)
 
         return new_row_id, access_token
-    
+
     def check_user(self, username, password):
         # Получаем хэш пароля
         password_hash = self.get_hash(password)
@@ -112,15 +114,13 @@ class SQLQueriesUsers():
     def get_hash(input_string):
         # Создаем объект хэша SHA-256
         sha256_hash = SHA256.new()
-        
+
         # Обновляем хэш с использованием байтового представления строки
         sha256_hash.update(input_string.encode('utf-8'))
-        
+
         # Возвращаем хэш в виде шестнадцатеричной строки
         return sha256_hash.hexdigest()
-    
+
     def close(self):
         self.cursor.close()
         self.connection.close()
-
-
