@@ -48,4 +48,22 @@ class SQLQueriesTasks():
         self.connection.close()
 
 
+class SQLQueriesUsers():
+    
+    def __init__(self, table_name, drop_table=True):
+        self.database = DataBase()
+        self.table_name = table_name
+        self.cursor = self.database.cursor
+        self.connection = self.database.connection
+
+        if drop_table:
+            self.database.drop_table(self.table_name)
+
+        self.database.create_table_tasks(self.table_name)
+
+
+    def close(self):
+        self.cursor.close()
+        self.connection.close()
+
 

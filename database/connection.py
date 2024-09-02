@@ -61,3 +61,25 @@ class DataBase():
                 f"Error while creating table: {error}"
             )   
 
+    def create_table_users(self, table_name):
+        # SQL-запрос для создания таблицы
+        create_table_query = f"""
+        CREATE TABLE {table_name} (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR,
+            password VARCHAR,
+            access_token VARCHAR
+        );
+        """
+
+        # Создание таблицы
+        try:
+            self.cursor.execute(create_table_query)
+            self.connection.commit()
+            print(
+                f"Table '{table_name}' created successfully"
+            ) 
+        except (Exception, psycopg2.Error) as error:
+            print(
+                f"Error while creating table: {error}"
+            )   
