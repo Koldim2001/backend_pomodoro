@@ -63,7 +63,7 @@ class SQLQueriesUsers():
         if drop_table:
             self.database.drop_table(self.table_name)
 
-        self.database.create_table_tasks(self.table_name)
+        self.database.create_table_users(self.table_name)
 
     def create_new_user(self, username, password):
         password_hash = self.get_hash(password)
