@@ -45,7 +45,8 @@ class DataBase():
             id SERIAL PRIMARY KEY,
             name VARCHAR,
             pomodoro_count INTEGER,
-            category_id INTEGER
+            category_id INTEGER,
+            user_id INTEGER,
         );
         """
 
