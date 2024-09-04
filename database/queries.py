@@ -109,6 +109,17 @@ class SQLQueriesUsers():
                 # Пароль верный, возвращаем id и access_token
                 access_token = JWTUtils.generate_access_token(user_id=user_id)
                 return user_id, access_token
+            
+    def get_user_name(self, id):
+        # Получаем имя пользователя по его id
+        query = "SELECT username FROM {table_name} WHERE id = %s"
+        self.cursor.execute(query.format(table_name=self.table_name), (id,))
+        user_data = self.cursor.fetchone()
+        if user_data is None:
+            # Пользователь не найден
+            return "Пользователь не найден"
+        else:
+            return user_data[0]
 
     @staticmethod
     def get_hash(input_string):
