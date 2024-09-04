@@ -10,7 +10,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
     summary="Регистрация пользователей",
     description="Осуществляет создание нового пользователя",
 )
-async def ping_db(body: UserCreateSchema) -> UserLoginSchema:
+async def create_user(body: UserCreateSchema) -> UserLoginSchema:
     result = sql_queries_users.create_new_user(body.username, body.password)
     
     if isinstance(result, str):
