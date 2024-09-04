@@ -1,7 +1,7 @@
 import smtplib
 from email.message import EmailMessage
 from schema import TaskSchema
-from database import sql_queries_tasks
+from database import sql_queries_tasks, sql_queries_users
 from dotenv import load_dotenv
 import os
 
@@ -61,8 +61,9 @@ def get_email_template(username: str, recipient_email: str, task_text: str):
 @celery.task
 def send_email_report_tasks(recipient_email: str, user_id: int):
     task_text = get_tasks_to_send(user_id)
+    username = sql_queries_users.get_user_name(user_id) # Получаем имя пользователя по его id
     email = get_email_template(
-        username=user_id, recipient_email=recipient_email, task_text=task_text
+        username=username, recipient_email=recipient_email, task_text=task_text
     )
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as server:
         server.login(SMTP_USER, SMTP_PASSWORD)
