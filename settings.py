@@ -11,3 +11,5 @@ class Settings(BaseSettings):
     CACHE_DB: int = 0
     JWT_SECRET_KEY: str = 'secret_key'
     JWT_ENCODE_ALGORITHM: str = 'HS256'
+    SMTP_USER: str = 'example@gmail.com' # почтовый клиент
+    SMTP_PASSWORD: str = 'example123'  # пароль почтового клиента
