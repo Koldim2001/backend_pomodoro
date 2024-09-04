@@ -10,7 +10,7 @@ http://127.0.0.1:8000 - сайт
 
 http://127.0.0.1:8000/docs - OpenAPI документация (swagger)
 
-![image](https://github.com/user-attachments/assets/2848e1f9-8959-417c-bfa6-82efa5160495)
+![image](https://github.com/user-attachments/assets/c96d44e8-c32f-4f67-9735-0439e4b2f27e)
 
 Запуск celery в отдельном терминале (реализует сервис отправки email отчетов):
 ```
