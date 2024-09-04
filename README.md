@@ -16,5 +16,5 @@ http://127.0.0.1:8000/docs - OpenAPI документация (swagger)
 
 Запуск celery в отдельном терминале:
 ```
-celery -A utils.email:celery worker --loglevel=INFO --pool=solo
+celery -A celery_workers.email:celery worker --loglevel=INFO --pool=solo
 ```

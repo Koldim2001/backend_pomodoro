@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from utils.email import send_email_report_tasks
+from celery_workers.email import send_email_report_tasks
 from utils.jwt import get_request_user_id
 
 router = APIRouter(prefix="/report")
