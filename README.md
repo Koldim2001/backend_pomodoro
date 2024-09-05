@@ -1,7 +1,7 @@
-# backend_pomodoro
+# Бэкенд приложение (обработчик тасок) - версия для локального поднятия (без докера)
 FastAPI Pomofocus-like backend
 
-
+Запуск FastAPI:
 ```
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload --env-file .env
 ```
