@@ -3,16 +3,14 @@ from fastapi import security, Security, HTTPException
 from datetime import datetime as dt, timedelta
 from jose import jwt, JWTError
 
-settings_jwt = Settings()
-
-
 class TokenExpired(Exception):
     detail = "Token has expired"
-
 
 class TokenNotCorrect(Exception):
     detail = "Token is not correct"
 
+settings_jwt = Settings()
+reusable_oauth2 = security.HTTPBearer()
 
 class JWTUtils:
     @staticmethod
@@ -34,9 +32,6 @@ class JWTUtils:
         if payload["expire"] < dt.utcnow().timestamp():
             raise TokenExpired
         return payload["user_id"]
-
-
-reusable_oauth2 = security.HTTPBearer()
 
 
 def get_request_user_id(
