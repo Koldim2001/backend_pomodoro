@@ -1,20 +1,63 @@
 version: '3.9'
 
 services:
-
-  db_postgras:
+  db_postgras_pomodoro:
     image: postgres:16.3-alpine
     restart: always
-    shm_size: 128mb
     ports:
       - '5432:5432'
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
       POSTGRES_DB: pomodoro
+    volumes:
+      - ./external_services/db_data:/var/lib/postgresql/data
+    networks:
+      - prod_network
 
-  cache-test:
+  cache_pomodoro:
     image: redis:7.2.4-alpine
     restart: always
     ports:
       - '6379:6379'
+    volumes:
+      - .:/app
+    networks:
+      - prod_network
+
+  backend_pomodoro:
+    build: .
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --env-file .env
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db_postgras_pomodoro
+      - cache_pomodoro
+    networks:
+      - prod_network
+
+  celery_worker_pomodoro:
+    build: .
+    command: celery -A celery_workers.email:celery worker --loglevel=INFO
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - db_postgras_pomodoro
+      - cache_pomodoro
+    networks:
+      - prod_network
+
+volumes:
+  db_data:
+
+networks:
+  prod_network:
+    driver: bridge

@@ -15,7 +15,10 @@ SMTP_PORT = 465
 SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
-celery = Celery("tasks_email", broker="redis://localhost:6379")
+CACHE_HOST = os.getenv("CACHE_HOST")
+CACHE_PORT = os.getenv("CACHE_PORT")
+
+celery = Celery("tasks_email", broker=f"redis://{CACHE_HOST}:{CACHE_PORT}")
 
 
 def format_tasks_as_yaml(tasks):

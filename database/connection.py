@@ -41,7 +41,7 @@ class DataBase:
     def create_table_tasks(self, table_name):
         # SQL-запрос для создания таблицы
         create_table_query = f"""
-        CREATE TABLE {table_name} (
+        CREATE TABLE IF NOT EXISTS {table_name} (
             id SERIAL PRIMARY KEY,
             name VARCHAR,
             pomodoro_count INTEGER,
@@ -61,7 +61,7 @@ class DataBase:
     def create_table_users(self, table_name):
         # SQL-запрос для создания таблицы
         create_table_query = f"""
-        CREATE TABLE {table_name} (
+        CREATE TABLE IF NOT EXISTS {table_name} (
             id SERIAL PRIMARY KEY,
             username VARCHAR,
             password VARCHAR

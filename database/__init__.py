@@ -3,7 +3,7 @@ from database.queries import SQLQueriesTasks
 from database.queries import SQLQueriesUsers
 
 # Нужно ли очищать таблицы при перезапуске (при разработке полезно)
-drop_table = True
+drop_table = False
 
 # Инитциализация постграс и редис для тасок
 sql_queries_tasks = SQLQueriesTasks(table_name="tasks", drop_table=drop_table)
