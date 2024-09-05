@@ -14,7 +14,7 @@ router = APIRouter(prefix="/task", tags=["task"])
 )
 async def get_tasks(user_id: int = Depends(get_request_user_id)):
     # Проверяем наличие данных в кэше
-    cache_tasks = task_cache.get_tasks()
+    cache_tasks = task_cache.get_tasks(user_id=user_id)
     if cache_tasks:
         print("Данные взяты из кэша")
         return cache_tasks
@@ -30,7 +30,7 @@ async def get_tasks(user_id: int = Depends(get_request_user_id)):
 
     # Сохраняем данные в кэш
     if len(tasks) > 0:
-        task_cache.set_tasks(tasks)
+        task_cache.set_tasks(tasks=tasks, user_id=user_id)
 
     return tasks
 
