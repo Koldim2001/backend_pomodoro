@@ -3,7 +3,8 @@ import psycopg2
 
 settings = Settings()
 
-class DataBase():
+
+class DataBase:
 
     def __init__(self):
         # Параметры подключения к базе данных
@@ -14,7 +15,7 @@ class DataBase():
             "port": settings.DB_PORT,
             "database": settings.DB_NAME,
         }
-        
+
         # Подключение к базе данных
         try:
             self.connection = psycopg2.connect(**conn_params)
@@ -24,7 +25,6 @@ class DataBase():
 
         # Создание курсора для выполнения SQL-запросов
         self.cursor = self.connection.cursor()
-
 
     def drop_table(self, table_name):
         self.table_name = table_name
@@ -54,13 +54,9 @@ class DataBase():
         try:
             self.cursor.execute(create_table_query)
             self.connection.commit()
-            print(
-                f"Table '{table_name}' created successfully"
-            ) 
+            print(f"Table '{table_name}' created successfully")
         except (Exception, psycopg2.Error) as error:
-            print(
-                f"Error while creating table: {error}"
-            )   
+            print(f"Error while creating table: {error}")
 
     def create_table_users(self, table_name):
         # SQL-запрос для создания таблицы
@@ -76,10 +72,6 @@ class DataBase():
         try:
             self.cursor.execute(create_table_query)
             self.connection.commit()
-            print(
-                f"Table '{table_name}' created successfully"
-            ) 
+            print(f"Table '{table_name}' created successfully")
         except (Exception, psycopg2.Error) as error:
-            print(
-                f"Error while creating table: {error}"
-            )   
+            print(f"Error while creating table: {error}")

@@ -3,7 +3,7 @@ from Crypto.Hash import SHA256
 from utils.jwt import JWTUtils
 
 
-class SQLQueriesTasks():
+class SQLQueriesTasks:
 
     def __init__(self, table_name, drop_table=True):
         self.database = DataBase()
@@ -52,7 +52,7 @@ class SQLQueriesTasks():
         self.connection.close()
 
 
-class SQLQueriesUsers():
+class SQLQueriesUsers:
 
     def __init__(self, table_name, drop_table=True):
         self.database = DataBase()
@@ -109,7 +109,7 @@ class SQLQueriesUsers():
                 # Пароль верный, возвращаем id и access_token
                 access_token = JWTUtils.generate_access_token(user_id=user_id)
                 return user_id, access_token
-            
+
     def get_user_name(self, id):
         # Получаем имя пользователя по его id
         query = "SELECT username FROM {table_name} WHERE id = %s"
@@ -127,7 +127,7 @@ class SQLQueriesUsers():
         sha256_hash = SHA256.new()
 
         # Обновляем хэш с использованием байтового представления строки
-        sha256_hash.update(input_string.encode('utf-8'))
+        sha256_hash.update(input_string.encode("utf-8"))
 
         # Возвращаем хэш в виде шестнадцатеричной строки
         return sha256_hash.hexdigest()

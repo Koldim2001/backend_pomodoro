@@ -6,17 +6,13 @@ from settings import Settings
 
 def get_redis_connection() -> redis.Redis:
     settings = Settings()
-    return redis.Redis(
-        host=settings.CACHE_HOST,
-        port=settings.CACHE_PORT,
-        db=settings.CACHE_DB
-    )
+    return redis.Redis(host=settings.CACHE_HOST, port=settings.CACHE_PORT, db=settings.CACHE_DB)
 
 
 class TaskCache:
     def __init__(self, ttl: int = 5):
         self.redis = get_redis_connection()
-        self.ttl = ttl # длительность хранения кэша в секундах
+        self.ttl = ttl  # длительность хранения кэша в секундах
 
     def get_tasks(self) -> list[TaskSchema]:
         with self.redis as redis:

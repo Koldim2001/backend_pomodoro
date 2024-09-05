@@ -12,8 +12,8 @@ load_dotenv()
 
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 465
-SMTP_USER = os.getenv('SMTP_USER')
-SMTP_PASSWORD = os.getenv('EMAIL_PASSWORD')
+SMTP_USER = os.getenv("SMTP_USER")
+SMTP_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 celery = Celery("tasks_email", broker="redis://localhost:6379")
 
@@ -51,7 +51,7 @@ def get_email_template(username: str, recipient_email: str, task_text: str):
     email.set_content(
         "<div>"
         f'<h3 style="color: red;">Здравствуйте, {username}, а вот и ваш отчет по таскам:</h3>'
-        f'<pre>{task_text}</pre>'  # Используем <pre> для сохранения форматирования
+        f"<pre>{task_text}</pre>"  # Используем <pre> для сохранения форматирования
         "</div>",
         subtype="html",
     )
@@ -61,7 +61,7 @@ def get_email_template(username: str, recipient_email: str, task_text: str):
 @celery.task
 def send_email_report_tasks(recipient_email: str, user_id: int):
     task_text = get_tasks_to_send(user_id)
-    username = sql_queries_users.get_user_name(user_id) # Получаем имя пользователя по его id
+    username = sql_queries_users.get_user_name(user_id)  # Получаем имя пользователя по его id
     email = get_email_template(
         username=username, recipient_email=recipient_email, task_text=task_text
     )

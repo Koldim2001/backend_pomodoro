@@ -12,7 +12,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 )
 async def create_user(body: UserCreateSchema) -> UserLoginSchema:
     result = sql_queries_users.create_new_user(body.username, body.password)
-    
+
     if isinstance(result, str):
         # Если результат - строка, значит, произошла ошибка
         raise HTTPException(status_code=400, detail=result)
